@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "location.h"
+#include "inventory.h"
 
 bool parseAndExecute(char *input)
 {
@@ -18,6 +19,26 @@ bool parseAndExecute(char *input)
         else if (strcmp(verb, "go") == 0)
         {
             executeGo(noun);
+        }
+        else if(strcmp(verb, "get") == 0)
+        {
+            executeGet(noun);
+        }
+        else if (strcmp(verb, "drop") == 0)
+        {
+            executeDrop(noun);
+        }
+        else if (strcmp(verb, "give") == 0)
+        {
+            executeGive(noun);
+        }
+        else if (strcmp(verb, "ask") == 0)
+        {
+            executeAsk(noun);
+        }
+        else if (strcmp(verb, "inventory") == 0)
+        {
+            executeInventory();
         }
         else
         {
