@@ -3,6 +3,7 @@
 #include "object.h"
 #include "misc.h"
 #include "noun.h"
+#include <stdbool.h>
 struct location{
     const char *description;
     const char *tag;
@@ -29,25 +30,29 @@ void executeLook(const char *noun){
 void executeGo(const char *noun)
 {
      OBJECT *obj = getVisible("where you want to go", noun);
-   if (obj == NULL)
+   switch (getDistance(player, obj))
    {
+   case distOverthere:
+      printf("OK.\n");
+      player->location = obj;
+      executeLook("around");
+      break;
+   case distNotHere:
+      printf("You don't see any %s here.\n", noun);
+      break;
+   case distUnknownObject:
       // already handled by getVisible
-   }
-   else if (getPassage(player->location, obj) != NULL){
-    printf("OK.\n");
-    player -> location = obj;
-    executeLook("around");
-   }
-   else if (obj -> location != player->location){
-    printf("You don't see any %s here.\n");
-   }
-   else if (obj->destination != NULL){
-    printf("OK.\n");
-    player->location = obj->destination;
-    executeLook("around");
-   }
-   else
-   {
-      printf("You can't get much closer than this.\n");
+      break;
+   default:
+      if (obj->destination != NULL)
+      {
+         printf("OK.\n");
+         player->location = obj->destination;
+         executeLook("around");
+      }
+      else
+      {
+         printf("You can't get much closer than this.\n");
+      }
    }
 }

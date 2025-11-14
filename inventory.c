@@ -3,24 +3,34 @@
 #include "misc.h"
 #include "noun.h"
 #include "move.h"
-
-void executeGet(const char *noun){
-    OBJECT *obj = getVisible("what you want to get", noun);
-    if(obj == NULL){
-        //already handled by getVisible
-    }
-    else if(obj == player){
-        printf("You should not be doing that to yourself.\n");
-    }
-    else if(obj -> location == player){
-        printf("You already have %s.\n", obj->description);
-    }
-    else if (obj->location == guard){
-        printf("You should ask %s nicely.\n", obj->location->description);
-    }
-    else{
-        moveObject(obj, player);
-    }
+#include <stdbool.h>
+void executeGet(const char *noun)
+{
+   OBJECT *obj = getVisible("what you want to get", noun);
+   switch (getDistance(player, obj))
+   {
+   case distSelf:
+      printf("You should not be doing that to yourself.\n");
+      break;
+   case distHeld:
+      printf("You already have %s.\n", obj->description);
+      break;
+   case distOverthere:
+      printf("Too far away, move closer please.\n");
+      break;
+   case distUnknownObject:
+      // already handled by getVisible
+      break;
+   default:
+      if (obj->location == guard)
+      {
+         printf("You should ask %s nicely.\n", obj->location->description);
+      }
+      else
+      {
+         moveObject(obj, player);
+      }
+   }
 }
 void executeDrop(const char *noun)
 {
