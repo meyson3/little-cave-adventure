@@ -11,7 +11,7 @@ bool parseAndExecute(char *input)
    {
       if (strcmp(verb, "quit") == 0)
       {
-         return false;
+         return  false;
       }
       else if (strcmp(verb, "look") == 0)
       {
